@@ -55,7 +55,7 @@ def put(
 
 
 @router.delete("/{id}", response_model=Product)
-def delete(id: str, session: Session = Depends(get_session)) -> JSONResponse:
+async def delete(id: str, session: Session = Depends(get_session)) -> JSONResponse:
     product: Product = get_product(id, session)
     session.delete(product)
     session.commit()

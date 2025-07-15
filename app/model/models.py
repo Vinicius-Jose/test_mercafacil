@@ -1,6 +1,5 @@
-from typing import Optional
 import uuid
-from sqlmodel import Relationship, SQLModel, Field
+from sqlmodel import Relationship, SQLModel, Field, Column, JSON
 from datetime import datetime
 
 
@@ -49,16 +48,29 @@ class Order(SQLModel, table=True):
     created_at: datetime = Field(nullable=False, default_factory=datetime.now)
 
 
-class OrderProductOutput(SQLModel, tabel=False):
+class OrderProductOutput(SQLModel, table=False):
     id: str = Field(nullable=False)
     quantity: int = Field(nullable=False)
     price: float = Field(default=None)
 
 
-class OrderOutput(SQLModel, tabel=False):
+class OrderOutput(SQLModel, table=False):
     order_id: str = Field(nullable=False)
     customer_id: str = Field(nullable=False)
     products: list["OrderProductOutput"]
     total_amount: float = Field(default=None)
     status: str = Field(nullable=False)
     created_at: str = Field(nullable=False)
+
+
+class Log(SQLModel, table=True):
+    id: int = Field(default=None, primary_key=True)
+    ip_address: str = Field(nullable=False)
+    path: str = Field(nullable=False)
+    method: str = Field(nullable=True)
+    status_code: int = Field(nullable=False)
+    request_body: str = Field(default=None, sa_column=Column(JSON))
+    response_body: str = Field(default=None, sa_column=Column(JSON))
+    query_params: dict | None = Field(default=None, sa_column=Column(JSON))
+    process_time: float
+    created_at: datetime = Field(nullable=False, default_factory=datetime.now)

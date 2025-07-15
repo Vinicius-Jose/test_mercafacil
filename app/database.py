@@ -1,8 +1,8 @@
 from sqlmodel import SQLModel, Session
-from app.model.models import Product, Order
-from fastapi import Depends
+from app.model.models import Product, Order, Log
+
 import os
-from typing import Annotated
+
 from sqlalchemy import create_engine
 
 

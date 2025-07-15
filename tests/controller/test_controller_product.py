@@ -1,5 +1,5 @@
 from httpx import Response
-from tests.main import client
+from tests.main import client, clean_db
 from app.model.models import ProductInput
 
 
@@ -17,7 +17,9 @@ def test_post_product() -> None:
     assert product.get("id")
 
 
-def test_get_all_products() -> None:
+def test_get_all_products(clean_db) -> None:
+    # This Test need to be executed separeted,
+    # because the table product need to be empty
     products_input = [
         {
             "name": "Lays",
