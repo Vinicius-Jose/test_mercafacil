@@ -166,7 +166,7 @@ def test_delete() -> None:
     response = client.post("/orders", json=order)
     order = response.json()
     response = client.delete(f"/orders/{order.get('order_id')}")
-    assert response.status_code == 204
+    assert response.status_code == 200
     response = client.get(f"/orders/{order.get('order_id')}")
     assert response.status_code == 404
 

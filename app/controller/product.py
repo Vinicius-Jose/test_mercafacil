@@ -51,6 +51,7 @@ def put(
     product.category = product_input.category
     session.add(product)
     session.commit()
+    session.refresh(product)
     return product
 
 
@@ -59,4 +60,4 @@ async def delete(id: str, session: Session = Depends(get_session)) -> JSONRespon
     product: Product = get_product(id, session)
     session.delete(product)
     session.commit()
-    return JSONResponse(product.model_dump(), status_code=status.HTTP_204_NO_CONTENT)
+    return JSONResponse(product.model_dump(), status_code=status.HTTP_200_OK)

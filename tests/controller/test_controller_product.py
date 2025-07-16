@@ -115,7 +115,7 @@ def test_delete_product() -> None:
     response: Response = client.post("/products", json=product_input)
     product: dict = response.json()
     response: Response = client.delete(f"/products/{product.get('id')}")
-    assert response.status_code == 204
+    assert response.status_code == 200
     response: Response = client.get(f"/products/{product.get('id')}")
     assert response.status_code == 404
 

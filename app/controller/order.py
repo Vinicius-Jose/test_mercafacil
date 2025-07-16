@@ -126,7 +126,7 @@ def delete(id: str, session: Session = Depends(get_session)) -> JSONResponse:
         session.commit()
         return JSONResponse(
             sqlmodel_to_order_output(order).model_dump(),
-            status_code=status.HTTP_204_NO_CONTENT,
+            status_code=status.HTTP_200_OK,
         )
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND, detail=f"Order with id {id} not found"
