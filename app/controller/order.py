@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, status, HTTPException
 from fastapi.responses import JSONResponse
 from sqlmodel import Session, select
+from app.controller.worker import Worker
 from app.model.models import (
     Order,
     OrderProduct,
@@ -69,9 +70,9 @@ def post(
     session.add(order)
     session.commit()
     session.refresh(order)
-
     order_output = sqlmodel_to_order_output(order)
-    # TODO Add order to worker
+    worker = Worker()
+    worker.add_to_queue(order.order_id, get_session)
     return JSONResponse(order_output.model_dump(), status_code=status.HTTP_201_CREATED)
 
 

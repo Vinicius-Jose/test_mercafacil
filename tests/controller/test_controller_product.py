@@ -18,8 +18,7 @@ def test_post_product() -> None:
 
 
 def test_get_all_products(clean_db) -> None:
-    # This Test need to be executed separeted,
-    # because the table product need to be empty
+    # Cleans the db to make sure that will be only 2 products
     products_input = [
         {
             "name": "Lays",

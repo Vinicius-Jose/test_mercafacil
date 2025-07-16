@@ -39,20 +39,20 @@ class LoggingMiddleware(BaseHTTPMiddleware):
         logger.info(
             f"Response: {request.method} {request.url} - Status: {response.status_code} - Time: {process_time:.4f}s"
         )
-        if os.environ.get("ENV").lower() == "prod":
-            response_body = [section async for section in response.body_iterator]
-            response.body_iterator = iterate_in_threadpool(iter(response_body))
-            response_body = (b"".join(response_body)).decode("utf-8")
 
-            response.background = BackgroundTask(
-                self.write_log_db,
-                request,
-                request_body,
-                response_body,
-                response.status_code,
-                process_time,
-                created_at,
-            )
+        response_body = [section async for section in response.body_iterator]
+        response.body_iterator = iterate_in_threadpool(iter(response_body))
+        response_body = (b"".join(response_body)).decode("utf-8")
+
+        response.background = BackgroundTask(
+            self.write_log_db,
+            request,
+            request_body,
+            response_body,
+            response.status_code,
+            process_time,
+            created_at,
+        )
         return response
 
     async def write_log_db(

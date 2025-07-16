@@ -53,6 +53,31 @@ def test_post() -> None:
     )
 
 
+def test_post_worker() -> None:
+    product = insert_products()[0]
+    orders: list[dict] = []
+    for i in range(0, 20):
+        order = {
+            "customer_id": f"cust{i}",
+            "products": [{"id": product.get("id"), "quantity": 1}],
+        }
+        response = client.post("/orders", json=order)
+        sleep(0.3)
+        orders.append(response.json())
+    first = orders[0]
+    middle = orders[round(len(orders) / 2)]
+    last = orders[-1]
+    response_first = client.get(f"/orders/{first.get('order_id')}")
+    response_middle = client.get(f"/orders/{middle.get('order_id')}")
+    response_last = client.get(f"/orders/{last.get('order_id')}")
+    order_first: dict = response_first.json()
+    order_middle: dict = response_middle.json()
+    order_last: dict = response_last.json()
+    assert order_first.get("status") == "completed"
+    assert order_middle.get("status") == "processing"
+    assert order_last.get("status") == "pending"
+
+
 def test_post_quantity_invalid() -> None:
     product = insert_products()[0]
     order = {
