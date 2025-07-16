@@ -4,7 +4,7 @@ from sqlalchemy import StaticPool
 from app.model.models import Product, Order, Log
 from sqlmodel import SQLModel, Session, create_engine
 from app.main import app
-from app.database import get_session, engine
+from app.model.database import get_session, engine
 import os
 from dotenv import load_dotenv
 
@@ -38,5 +38,6 @@ def clean_db():
     yield
 
 
+os.environ["ENV"] = "DEV"
 app.dependency_overrides[get_session] = get_test_session
 client = TestClient(app)

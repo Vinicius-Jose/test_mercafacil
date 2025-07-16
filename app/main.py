@@ -5,8 +5,8 @@ import toml
 
 from app.controller.product import router as product_router
 from app.controller.order import router as order_router
-from app.database import create_db_and_tables, get_session
-from app.log import LoggingMiddleware
+from app.model.database import create_db_and_tables, get_session
+from app.controller.log import LoggingMiddleware
 
 with open("pyproject.toml", "r") as f:
     config = toml.load(f)

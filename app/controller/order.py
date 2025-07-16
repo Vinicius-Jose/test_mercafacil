@@ -11,7 +11,7 @@ from app.model.models import (
     Product,
 )
 from app.controller.product import get_product
-from app.database import get_session
+from app.model.database import get_session
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
 
@@ -99,15 +99,20 @@ def get_order(id: str, session: Session = Depends(get_session)) -> OrderOutput:
 def put(
     id: str, order_input: OrderInput, session: Session = Depends(get_session)
 ) -> OrderOutput:
-    order = get_order(id, session)
+    order = session.get(Order, id)
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Order with id {id} not found",
+        )
     order.customer_id = order_input.customer_id
-    order_db_products_id = [item.id for item in order.products]
+    order_db_products_id = [item.product_id for item in order.products]
     order_input_products_id = [item.id for item in order_input.products]
     products_deleted = list(set(order_db_products_id) - set(order_input_products_id))
     for product in order_input.products:
         update_order_product(session, order, order_db_products_id, product)
     delete_order_products(session, order, products_deleted)
-    order = session.get(Order, id)
+    session.add(order)
     session.commit()
     return sqlmodel_to_order_output(order)
 

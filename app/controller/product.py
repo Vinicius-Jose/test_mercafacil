@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status, HTTPException
 from fastapi.responses import JSONResponse
 from sqlmodel import Session, select
 from app.model.models import Product, ProductInput
-from app.database import get_session
+from app.model.database import get_session
 
 router = APIRouter(prefix="/products", tags=["Products"])
 

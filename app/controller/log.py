@@ -1,5 +1,5 @@
 import logging
-from fastapi import Request, Response
+from fastapi import Request
 from fastapi.concurrency import iterate_in_threadpool
 from fastapi.responses import StreamingResponse
 from sqlmodel import Session
@@ -10,7 +10,7 @@ import os
 from starlette.background import BackgroundTask
 
 
-from app.database import get_session
+from app.model.database import get_session
 from app.model.models import Log
 
 level = os.environ.get("LOG_LEVEL", "INFO")
