@@ -77,7 +77,7 @@
    ### **Executando com docker**
     - Crie a imagem Docker:
         ```bash
-        docker build --pull --rm -f "Dockerfile" -t ecommerce_api_image:latest "."
+        docker build -f "Dockerfile" -t ecommerce_api_image:latest "."
         ```
     - Execute o container:
         ```bash
